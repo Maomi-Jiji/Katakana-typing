@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katakana Typing Practice - Blue Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 水色ベースのカラー設定 */
+            --primary-blue: #00a8cc;
+            --soft-blue: #e0f7fa;
+            --border-blue: #b2ebf2;
+            --accent-blue: #007c91;
+            --text-color: #37474f;
+            --target-mark: #ff5252;
+        }
+
+        body { 
+            font-family: "UD Digital Kyokasho N-R", "UD デジタル 教科書体 N-R", "BIZ UDPGothic", "Zen Maru Gothic", sans-serif; 
+            background-color: var(--soft-blue); 
+            color: var(--text-color); 
+            margin: 0; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .app-card {
+            background: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+            border-radius: 15px;
+            padding: 8px;
+            border: 2px solid var(--border-blue);
+            box-sizing: border-box;
+            min-height: 0;
+        }
+
+        .app-title {
+            font-size: 20px;
+            text-align: center;
+            color: var(--text-color);
+            margin: 5px 0 10px 0;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .top-chart-section {
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            background: #f0fdff;
+            border-radius: 12px;
+            padding: 5px;
+            border: 1px solid var(--border-blue);
+            min-height: 0;
+        }
+
+        .tab-menu { display: flex; justify-content: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+        .tab-menu button {
+            font-family: inherit; padding: 4px 12px; font-size: 13px; cursor: pointer;
+            border-radius: 10px; border: 2px solid var(--border-blue); background: white; color: var(--primary-blue); font-weight: bold;
+        }
+        .tab-menu button.active-btn { background: var(--primary-blue); color: white; }
+        
+        .tab-menu button#btn-challenge { border-color: #37474f; color: #37474f; }
+        .tab-menu button#btn-challenge.challenge-on { background: #37474f; color: white; }
+
+        .chart-display-area { 
+            flex: 1; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+        }
+        
+        table { border-collapse: separate; border-spacing: 2px; background: white; border-radius: 8px; }
+        td { 
+            border: 1px solid #e0f2f1; width: 42px; height: 42px; text-align: center; border-radius: 6px; 
+            background: #fff; position: relative;
+        }
+        
+        .challenge-mode-active td:not(.vowel-label):not(.empty-col) .kana,
+        .challenge-mode-active td:not(.vowel-label):not(.empty-col) .romaji {
+            visibility: hidden;
+        }
+        .challenge-mode-active td:not(.vowel-label):not(.empty-col)::after {
+            content: "?"; color: #cfd8dc; font-size: 14px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+
+        .show-cell .kana, .show-cell .romaji { visibility: visible !important; }
+        .show-cell::after { display: none !important; }
+
+        .target-cell { border: 3px solid var(--target-mark) !important; background-color: #fff9f9 !important; z-index: 5; }
+        .vowel-label { background: var(--soft-blue); color: var(--accent-blue); font-size: 13px; font-weight: bold; width: 25px; border: none; }
+        .kana { font-size: 18px; font-weight: 700; color: #333; display: block; line-height: 1; }
+        .romaji { font-size: 9px; color: var(--primary-blue); display: block; opacity: 0.8; }
+
+        .bottom-quiz-section {
+            height: 180px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            border-top: 2px solid var(--soft-blue);
+            padding: 10px;
+            gap: 5px;
+            position: relative;
+        }
+
+        .score-box { position: absolute; top: 10px; right: 20px; font-size: 14px; font-weight: bold; color: var(--accent-blue); }
+        #question { font-size: 70px; color: var(--primary-blue); margin: 0; font-weight: bold; line-height: 1; }
+        .input-wrapper { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        #answer-input { font-family: inherit; font-size: 24px; padding: 8px; width: 160px; text-align: center; border: 2px solid var(--border-blue); border-radius: 20px; outline: none; }
+        .action-btn { padding: 8px 30px; font-size: 16px; font-weight: bold; background: var(--primary-blue); color: white; border: none; border-radius: 15px; cursor: pointer; transition: transform 0.1s; }
+        #next-btn { display: none; background: #4caf50; }
+        #feedback { font-size: 16px; font-weight: bold; height: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="app-card">
+    <h1 class="app-title">Katakana Typing</h1>
+
+    <div class="top-chart-section">
+        <div class="tab-menu">
+            <button id="btn-basic" onclick="setMode('basic')">Basic</button>
+            <button id="btn-contracted" onclick="setMode('contracted')">Contracted</button>
+            <button id="btn-foreign" onclick="setMode('foreign')">Foreign</button>
+            <button id="btn-mix" onclick="setMode('mix')">MIX</button>
+            <button id="btn-challenge" onclick="toggleChallenge()">Challenge ✨ OFF</button>
+        </div>
+        <div id="display-area" class="chart-display-area">
+            <div id="chart-container"></div>
+        </div>
+    </div>
+
+    <div class="bottom-quiz-section">
+        <div class="score-box">Correct: <span id="score-count">0</span></div>
+        <div id="question">?</div>
+        <div class="input-wrapper">
+            <input type="text" id="answer-input" placeholder="Type..." autocomplete="off">
+            <div id="feedback"></div>
+            <div class="btn-group">
+                <button id="check-btn" class="action-btn" onclick="check()">OK (Enter)</button>
+                <button id="next-btn" class="action-btn" onclick="nextQuestion()">Next (Enter)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const charts = {
+        basic: [[0,0,"ア","a"],[0,1,"イ","i"],[0,2,"ウ","u"],[0,3,"エ","e"],[0,4,"オ","o"],[1,0,"カ","ka"],[1,1,"キ","ki"],[1,2,"ク","ku"],[1,3,"ケ","ke"],[1,4,"コ","ko"],[2,0,"サ","sa"],[2,1,"シ","shi"],[2,2,"ス","su"],[2,3,"セ","se"],[2,4,"ソ","so"],[3,0,"タ","ta"],[3,1,"チ","chi"],[3,2,"ツ","tsu"],[3,3,"テ","te"],[3,4,"ト","to"],[4,0,"ナ","na"],[4,1,"ニ","ni"],[4,2,"ヌ","nu"],[4,3,"ネ","ne"],[4,4,"ノ","no"],[5,0,"ハ","ha"],[5,1,"ヒ","hi"],[5,2,"フ","fu"],[5,3,"ヘ","he"],[5,4,"ホ","ho"],[6,0,"マ","ma"],[6,1,"ミ","mi"],[6,2,"ム","mu"],[6,3,"メ","me"],[6,4,"モ","mo"],[7,0,"ヤ","ya"],[7,2,"ユ","yu"],[7,4,"ヨ","yo"],[8,0,"ラ","ra"],[8,1,"リ","ri"],[8,2,"ル","ru"],[8,3,"レ","re"],[8,4,"ロ","ro"],[9,0,"ワ","wa"],[9,2,"ヲ","wo"],[9,4,"ン","nn"],[11,0,"ガ","ga"],[11,1,"ギ","gi"],[11,2,"グ","gu"],[11,3,"ゲ","ge"],[11,4,"ご","go"],[12,0,"ザ","za"],[12,1,"ジ","ji"],[12,2,"ズ","zu"],[12,3,"ゼ","ze"],[12,4,"ゾ","zo"],[13,0,"ダ","da"],[13,1,"ヂ","ji"],[13,2,"ヅ","zu"],[13,3,"デ","de"],[13,4,"ド","do"],[14,0,"バ","ba"],[14,1,"ビ","bi"],[14,2,"ブ","bu"],[14,3,"ベ","be"],[14,4,"ボ","bo"],[15,0,"パ","pa"],[15,1,"ピ","pi"],[15,2,"プ","pu"],[15,3,"ペ","pe"],[15,4,"ポ","po"]],
+        contracted: [[0,0,"キャ","kya"],[0,2,"キュ","kyu"],[0,4,"キョ","kyo"],[1,0,"シャ","sya"],[1,2,"シュ","syu"],[1,4,"ショ","syo"],[2,0,"チャ","cya"],[2,2,"チュ","cyu"],[2,4,"チョ","cyo"],[3,0,"ニャ","nya"],[3,2,"ニュ","nyu"],[3,4,"ニョ","nyo"],[4,0,"ヒャ","hya"],[4,2,"ヒュ","hyu"],[4,4,"ヒョ","hyo"],[5,0,"ミャ","mya"],[5,2,"ミュ","myu"],[5,4,"ミョ","myo"],[6,0,"リャ","rya"],[6,2,"リュ","ryu"],[6,4,"リョ","ryo"],[8,0,"ギャ","gya"],[8,2,"ギュ","gyu"],[8,4,"ギョ","gyo"],[9,0,"ジャ","zya"],[9,2,"ジュ","zyu"],[9,4,"ジョ","zyo"],[10,0,"ビャ","bya"],[10,2,"ビュ","byu"],[10,4,"ビョ","byo"],[11,0,"ピャ","pya"],[11,2,"ピュ","pyu"],[11,4,"ピョ","pyo"]],
+        foreign: [[0,0,"ファ","fa"],[0,1,"フィ","fi"],[0,3,"フェ","fe"],[0,4,"フォ","fo"],[2,1,"ティ","thi"],[2,3,"チェ","che"],[3,1,"ディ","dhi"],[3,2,"デュ","dhu"],[5,3,"ジェ","je"],[6,3,"シェ","she"],[8,0,"ヴァ","va"],[8,1,"ヴィ","vi"],[8,2,"ヴ","vu"],[8,3,"ヴェ","ve"],[8,4,"ヴォ","vo"],[9,1,"ウィ","wi"],[9,3,"ウェ","we"],[9,4,"ウォ","who"]]
+    };
+
+    let currentCategory = 'basic'; 
+    let currentQ = null; 
+    let score = 0;
+    let isChallengeMode = false;
+
+    function renderSingleTable(mode, labelText) {
+        const list = charts[mode];
+        const maxCol = Math.max(...list.map(d => d[0]));
+        const labels = (mode === 'contracted') ? ["ya","","yu","","yo"] : ["a","i","u","e","o"];
+        let html = `<div><small style="color:var(--primary-blue); font-weight:bold;">${labelText}</small><table>`;
+        for (let r = 0; r < 5; r++) {
+            html += `<tr><td class="vowel-label">${labels[r]}</td>`;
+            for (let c = 0; c <= maxCol; c++) {
+                const item = list.find(d => d[0] === c && d[1] === r);
+                if (item) { html += `<td id="cell-${mode}-${c}-${r}"><span class="kana">${item[2]}</span><span class="romaji">${item[3]}</span></td>`; }
+                else { html += '<td class="empty-col" style="border:none;background:none;"></td>'; }
+            }
+            html += '</tr>';
+        }
+        return html + '</table></div>';
+    }
+
+    function setMode(category) {
+        currentCategory = category;
+        const container = document.getElementById('chart-container');
+        document.querySelectorAll('.tab-menu button').forEach(b => {
+            if(b.id !== 'btn-challenge') b.classList.remove('active-btn');
+        });
+        document.getElementById('btn-' + category).classList.add('active-btn');
+        
+        if (category === 'mix') {
+            container.innerHTML = renderSingleTable('basic', 'Basic') + renderSingleTable('contracted', 'Contracted') + renderSingleTable('foreign', 'Foreign');
+        } else {
+            container.innerHTML = renderSingleTable(category, category.toUpperCase());
+        }
+        nextQuestion();
+    }
+
+    function toggleChallenge() {
+        isChallengeMode = !isChallengeMode;
+        const btn = document.getElementById('btn-challenge');
+        const displayArea = document.getElementById('display-area');
+        
+        if (isChallengeMode) {
+            btn.classList.add('challenge-on');
+            btn.innerText = "Challenge ✨ ON";
+            displayArea.classList.add('challenge-mode-active');
+        } else {
+            btn.classList.remove('challenge-on');
+            btn.innerText = "Challenge ✨ OFF";
+            displayArea.classList.remove('challenge-mode-active');
+        }
+        document.querySelectorAll('td').forEach(td => td.classList.remove('target-cell', 'show-cell'));
+    }
+
+    function showTargetCell(isForceShow) {
+        document.querySelectorAll('td').forEach(td => td.classList.remove('target-cell', 'show-cell'));
+        const cellId = `cell-${currentQ.sourceMode}-${currentQ.data[0]}-${currentQ.data[1]}`;
+        const targetCell = document.getElementById(cellId);
+        if (targetCell) {
+            targetCell.classList.add('target-cell');
+            if (isForceShow) targetCell.classList.add('show-cell');
+            targetCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    function nextQuestion() {
+        let sourceMode = (currentCategory === 'mix') ? ['basic', 'contracted', 'foreign'][Math.floor(Math.random() * 3)] : currentCategory;
+        const source = charts[sourceMode];
+        currentQ = { data: source[Math.floor(Math.random() * source.length)], sourceMode: sourceMode };
+        document.getElementById('question').innerText = currentQ.data[2];
+        const input = document.getElementById('answer-input');
+        input.value = ''; input.disabled = false; input.focus();
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('next-btn').style.display = 'none';
+        document.getElementById('check-btn').style.display = 'inline-block';
+        
+        document.querySelectorAll('td').forEach(td => td.classList.remove('target-cell', 'show-cell'));
+    }
+
+    function check() {
+        const val = document.getElementById('answer-input').value.toLowerCase().trim();
+        const kana = currentQ.data[2];
+        const ans = currentQ.data[3];
+        let isCorrect = (val === ans) || (kana === 'シャ' && val === 'sha') || (kana === 'シュ' && val === 'shu') || (kana === 'ショ' && val === 'sho') || (kana === 'チャ' && val === 'cha') || (kana === 'チュ' && val === 'chu') || (kana === 'チョ' && val === 'cho') || (kana === 'ジャ' && (val === 'ja' || val === 'jya')) || (kana === 'ジュ' && (val === 'ju' || val === 'jyu')) || (kana === 'ジョ' && (val === 'jo' || val === 'jyo')) || (kana === 'フ' && val === 'hu') || (kana === 'シ' && val === 'si') || (kana === 'チ' && val === 'ti') || (kana === 'ツ' && val === 'tu');
+
+        if (isCorrect) {
+            document.getElementById('feedback').innerText = 'Correct! ✨';
+            document.getElementById('feedback').style.color = 'var(--accent-blue)';
+            score++; document.getElementById('score-count').innerText = score;
+            document.getElementById('answer-input').disabled = true;
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').focus();
+            showTargetCell(true);
+        } else {
+            document.getElementById('feedback').innerText = 'Check the chart💡';
+            document.getElementById('feedback').style.color = '#ff6347';
+            document.getElementById('answer-input').value = '';
+            showTargetCell(true); 
+        }
+    }
+
+    document.getElementById('answer-input').onkeydown = function(e) {
+        if (e.key === 'Enter') {
+            if (document.getElementById('next-btn').style.display === 'inline-block') nextQuestion();
+            else check();
+        }
+    };
+    setMode('basic');
+</script>
+</body>
+</html>
