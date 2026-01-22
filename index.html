@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 水色ベースのカラー設定 */
             --primary-blue: #00a8cc;
             --soft-blue: #e0f7fa;
             --border-blue: #b2ebf2;
@@ -100,7 +99,7 @@
         .show-cell::after { display: none !important; }
 
         .target-cell { border: 3px solid var(--target-mark) !important; background-color: #fff9f9 !important; z-index: 5; }
-        .vowel-label { background: var(--soft-blue); color: var(--accent-blue); font-size: 13px; font-weight: bold; width: 25px; border: none; }
+        .vowel-label { background: var(--soft-blue); color: var(--accent-blue); font-size: 11px; font-weight: bold; width: 30px; border: none; }
         .kana { font-size: 18px; font-weight: 700; color: #333; display: block; line-height: 1; }
         .romaji { font-size: 9px; color: var(--primary-blue); display: block; opacity: 0.8; }
 
@@ -160,8 +159,8 @@
 
 <script>
     const charts = {
-        basic: [[0,0,"ア","a"],[0,1,"イ","i"],[0,2,"ウ","u"],[0,3,"エ","e"],[0,4,"オ","o"],[1,0,"カ","ka"],[1,1,"キ","ki"],[1,2,"ク","ku"],[1,3,"ケ","ke"],[1,4,"コ","ko"],[2,0,"サ","sa"],[2,1,"シ","shi"],[2,2,"ス","su"],[2,3,"セ","se"],[2,4,"ソ","so"],[3,0,"タ","ta"],[3,1,"チ","chi"],[3,2,"ツ","tsu"],[3,3,"テ","te"],[3,4,"ト","to"],[4,0,"ナ","na"],[4,1,"ニ","ni"],[4,2,"ヌ","nu"],[4,3,"ネ","ne"],[4,4,"ノ","no"],[5,0,"ハ","ha"],[5,1,"ヒ","hi"],[5,2,"フ","fu"],[5,3,"ヘ","he"],[5,4,"ホ","ho"],[6,0,"マ","ma"],[6,1,"ミ","mi"],[6,2,"ム","mu"],[6,3,"メ","me"],[6,4,"モ","mo"],[7,0,"ヤ","ya"],[7,2,"ユ","yu"],[7,4,"ヨ","yo"],[8,0,"ラ","ra"],[8,1,"リ","ri"],[8,2,"ル","ru"],[8,3,"レ","re"],[8,4,"ロ","ro"],[9,0,"ワ","wa"],[9,2,"ヲ","wo"],[9,4,"ン","nn"],[11,0,"ガ","ga"],[11,1,"ギ","gi"],[11,2,"グ","gu"],[11,3,"ゲ","ge"],[11,4,"ゴ","go"],[12,0,"ザ","za"],[12,1,"ジ","ji"],[12,2,"ズ","zu"],[12,3,"ゼ","ze"],[12,4,"ゾ","zo"],[13,0,"ダ","da"],[13,1,"ヂ","ji"],[13,2,"ヅ","zu"],[13,3,"デ","de"],[13,4,"ド","do"],[14,0,"バ","ba"],[14,1,"ビ","bi"],[14,2,"ブ","bu"],[14,3,"ベ","be"],[14,4,"ボ","bo"],[15,0,"パ","pa"],[15,1,"ピ","pi"],[15,2,"プ","pu"],[15,3,"ペ","pe"],[15,4,"ポ","po"]],
-        contracted: [[0,0,"キャ","kya"],[0,2,"キュ","kyu"],[0,4,"キョ","kyo"],[1,0,"シャ","sya"],[1,2,"シュ","syu"],[1,4,"ショ","syo"],[2,0,"チャ","cya"],[2,2,"チュ","cyu"],[2,4,"チョ","cyo"],[3,0,"ニャ","nya"],[3,2,"ニュ","nyu"],[3,4,"ニョ","nyo"],[4,0,"ヒャ","hya"],[4,2,"ヒュ","hyu"],[4,4,"ヒョ","hyo"],[5,0,"ミャ","mya"],[5,2,"ミュ","myu"],[5,4,"ミョ","myo"],[6,0,"リャ","rya"],[6,2,"リュ","ryu"],[6,4,"リョ","ryo"],[8,0,"ギャ","gya"],[8,2,"ギュ","gyu"],[8,4,"ギョ","gyo"],[9,0,"ジャ","zya"],[9,2,"ジュ","zyu"],[9,4,"ジョ","zyo"],[10,0,"ビャ","bya"],[10,2,"ビュ","byu"],[10,4,"ビョ","byo"],[11,0,"ピャ","pya"],[11,2,"ピュ","pyu"],[11,4,"ピョ","pyo"]],
+        basic: [[0,0,"ア","a"],[0,1,"イ","i"],[0,2,"ウ","u"],[0,3,"エ","e"],[0,4,"オ","o"],[1,0,"カ","ka"],[1,1,"キ","ki"],[1,2,"ク","ku"],[1,3,"ケ","ke"],[1,4,"コ","ko"],[2,0,"サ","sa"],[2,1,"シ","shi"],[2,2,"ス","su"],[2,3,"セ","se"],[2,4,"ソ","so"],[3,0,"タ","ta"],[3,1,"チ","chi"],[3,2,"ツ","tsu"],[3,3,"テ","te"],[3,4,"ト","to"],[4,0,"ナ","na"],[4,1,"ニ","ni"],[4,2,"ヌ","nu"],[4,3,"ネ","ne"],[4,4,"ノ","no"],[5,0,"ハ","ha"],[5,1,"ヒ","hi"],[5,2,"フ","fu"],[5,3,"ヘ","he"],[5,4,"ホ","ho"],[6,0,"マ","ma"],[6,1,"ミ","mi"],[6,2,"ム","mu"],[6,3,"メ","me"],[6,4,"モ","mo"],[7,0,"ヤ","ya"],[7,2,"ユ","yu"],[7,4,"ヨ","yo"],[8,0,"ラ","ra"],[8,1,"リ","ri"],[8,2,"ル","ru"],[8,3,"レ","re"],[8,4,"ロ","ro"],[9,0,"ワ","wa"],[9,2,"ヲ","wo"],[9,4,"ン","nn"],[11,0,"ガ","ga"],[11,1,"ギ","gi"],[11,2,"グ","gu"],[11,3,"げ","ge"],[11,4,"ゴ","go"],[12,0,"ザ","za"],[12,1,"ジ","ji"],[12,2,"ズ","zu"],[12,3,"ゼ","ze"],[12,4,"ゾ","zo"],[13,0,"ダ","da"],[13,1,"ヂ","ji"],[13,2,"ヅ","zu"],[13,3,"デ","de"],[13,4,"ド","do"],[14,0,"バ","ba"],[14,1,"ビ","bi"],[14,2,"ブ","bu"],[14,3,"ベ","be"],[14,4,"ボ","bo"],[15,0,"パ","pa"],[15,1,"ピ","pi"],[15,2,"プ","pu"],[15,3,"ペ","pe"],[15,4,"ポ","po"]],
+        contracted: [[0,0,"キャ","kya"],[0,2,"キュ","kyu"],[0,4,"キョ","kyo"],[1,0,"シャ","sha"],[1,2,"シュ","shu"],[1,4,"ショ","sho"],[2,0,"チャ","cha"],[2,2,"チュ","chu"],[2,4,"チョ","cho"],[3,0,"ニャ","nya"],[3,2,"ニュ","nyu"],[3,4,"ニョ","nyo"],[4,0,"ヒャ","hya"],[4,2,"ヒュ","hyu"],[4,4,"ヒョ","hyo"],[5,0,"ミャ","mya"],[5,2,"ミュ","myu"],[5,4,"ミョ","myo"],[6,0,"リゃ","rya"],[6,2,"リュ","ryu"],[6,4,"リョ","ryo"],[8,0,"ギャ","gya"],[8,2,"ギュ","gyu"],[8,4,"ギョ","gyo"],[9,0,"ジャ","ja"],[9,2,"ジュ","ju"],[9,4,"ジョ","jo"],[10,0,"ビャ","bya"],[10,2,"ビュ","byu"],[10,4,"ビョ","byo"],[11,0,"ピャ","pya"],[11,2,"ピュ","pyu"],[11,4,"ピョ","pyo"]],
         foreign: [[0,0,"ファ","fa"],[0,1,"フィ","fi"],[0,3,"フェ","fe"],[0,4,"フォ","fo"],[2,1,"ティ","thi"],[2,3,"チェ","che"],[3,1,"ディ","dhi"],[3,2,"デュ","dhu"],[5,3,"ジェ","je"],[6,3,"シェ","she"],[8,0,"ヴァ","va"],[8,1,"ヴィ","vi"],[8,2,"ヴ","vu"],[8,3,"ヴェ","ve"],[8,4,"ヴォ","vo"],[9,1,"ウィ","wi"],[9,3,"ウェ","we"],[9,4,"ウォ","who"]]
     };
 
@@ -173,7 +172,9 @@
     function renderSingleTable(mode, labelText) {
         const list = charts[mode];
         const maxCol = Math.max(...list.map(d => d[0]));
-        const labels = (mode === 'contracted') ? ["ya","","yu","","yo"] : ["a","i","u","e","o"];
+        // 拗音があるときだけ拡張表示
+        const labels = (mode === 'contracted') ? ["a","i","u","e","o"];
+        
         let html = `<div><small style="color:var(--primary-blue); font-weight:bold;">${labelText}</small><table>`;
         for (let r = 0; r < 5; r++) {
             html += `<tr><td class="vowel-label">${labels[r]}</td>`;
@@ -241,29 +242,41 @@
         document.getElementById('feedback').innerText = '';
         document.getElementById('next-btn').style.display = 'none';
         document.getElementById('check-btn').style.display = 'inline-block';
-        
         document.querySelectorAll('td').forEach(td => td.classList.remove('target-cell', 'show-cell'));
     }
 
     function check() {
         const val = document.getElementById('answer-input').value.toLowerCase().trim();
+        if(!val) return;
+
         const kana = currentQ.data[2];
         const ans = currentQ.data[3];
-        let isCorrect = (val === ans) || (kana === 'シャ' && val === 'sha') || (kana === 'シュ' && val === 'shu') || (kana === 'ショ' && val === 'sho') || (kana === 'チャ' && val === 'cha') || (kana === 'チュ' && val === 'chu') || (kana === 'チョ' && val === 'cho') || (kana === 'ジャ' && (val === 'ja' || val === 'jya')) || (kana === 'ジュ' && (val === 'ju' || val === 'jyu')) || (kana === 'ジョ' && (val === 'jo' || val === 'jyo')) || (kana === 'フ' && val === 'hu') || (kana === 'シ' && val === 'si') || (kana === 'チ' && val === 'ti') || (kana === 'ツ' && val === 'tu');
 
-        if (isCorrect) {
+        // 柔軟な判定ロジック
+        let ok = (val === ans);
+        if (!ok) {
+            const alt = {
+                'シ': ['si'], 'シャ': ['sya'], 'シュ': ['syu'], 'ショ': ['syo'],
+                'チ': ['ti'], 'チャ': ['tya', 'cya'], 'チュ': ['tyu', 'cyu'], 'チョ': ['tyo', 'cyo'],
+                'ツ': ['tu'], 'フ': ['hu'],
+                'ジ': ['zi'], 'ジャ': ['zya', 'ja'], 'ジュ': ['zyu', 'ju'], 'ジョ': ['zyo', 'jo'],
+                'ヲ': ['o'], 'ン': ['n'], 'ヂ': ['ji', 'di'], 'ヅ': ['zu', 'du'],
+                'ヴ': ['vu'], 'ヴァ': ['va'], 'ヴィ': ['vi'], 'ヴェ': ['ve'], 'ヴォ': ['vo']
+            };
+            if (alt[kana] && alt[kana].includes(val)) ok = true;
+        }
+
+        if (ok) {
             document.getElementById('feedback').innerText = 'Correct! ✨';
             document.getElementById('feedback').style.color = 'var(--accent-blue)';
             score++; document.getElementById('score-count').innerText = score;
             document.getElementById('answer-input').disabled = true;
             document.getElementById('check-btn').style.display = 'none';
             document.getElementById('next-btn').style.display = 'inline-block';
-            document.getElementById('next-btn').focus();
             showTargetCell(true);
         } else {
             document.getElementById('feedback').innerText = 'Check the chart💡';
             document.getElementById('feedback').style.color = '#ff6347';
-            document.getElementById('answer-input').value = '';
             showTargetCell(true); 
         }
     }
@@ -278,4 +291,3 @@
 </script>
 </body>
 </html>
-
