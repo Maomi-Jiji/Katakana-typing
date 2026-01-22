@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* 水色ベースのカラー設定 */
             --primary-blue: #00a8cc;
             --soft-blue: #e0f7fa;
             --border-blue: #b2ebf2;
@@ -252,16 +251,16 @@
         const kana = currentQ.data[2];
         const ans = currentQ.data[3];
 
-        // 最新の強力な判定ロジック
         let isCorrect = (val === ans);
         if (!isCorrect) {
+            // ここをカタカナに変更しました
             const alt = {
-                'し': ['si'], 'しゃ': ['sya'], 'しゅ': ['syu'], 'しょ': ['syo'],
-                'ち': ['ti'], 'ちゃ': ['tya', 'cya'], 'ちゅ': ['tyu', 'cyu'], 'ちょ': ['tyo', 'cyo'],
-                'つ': ['tu'], 'ふ': ['hu'],
-                'じ': ['zi'], 'じゃ': ['zya', 'ja'], 'じゅ': ['zyu', 'ju'], 'じょ': ['zyo', 'jo'],
-                'を': ['o'], 'ん': ['n'], 'ぢ': ['ji', 'di'], 'づ': ['zu', 'du'],
-                'ゔぁ': ['va'], 'ゔぃ': ['vi'], 'ゔ': ['vu'], 'ゔぇ': ['ve'], 'ゔぉ': ['vo']
+                'シ': ['si'], 'シャ': ['sya'], 'シュ': ['syu'], 'ショ': ['syo'],
+                'チ': ['ti'], 'チャ': ['tya', 'cya'], 'チュ': ['tyu', 'cyu'], 'チョ': ['tyo', 'cyo'],
+                'ツ': ['tu'], 'フ': ['hu'],
+                'ジ': ['zi'], 'ジャ': ['zya', 'ja'], 'ジュ': ['zyu', 'ju'], 'ジョ': ['zyo', 'jo'],
+                'ヲ': ['o'], 'ン': ['n'], 'ヂ': ['ji', 'di'], 'ヅ': ['zu', 'du'],
+                'ヴ': ['vu'], 'ヴァ': ['va'], 'ヴィ': ['vi'], 'ヴェ': ['ve'], 'ヴォ': ['vo']
             };
             if (alt[kana] && alt[kana].includes(val)) isCorrect = true;
         }
@@ -289,8 +288,11 @@
             else check();
         }
     };
-    setMode('basic');
+
+    // DOMContentLoadedを使って、ページ読み込み完了時に確実に実行されるようにしました
+    document.addEventListener('DOMContentLoaded', () => {
+        setMode('basic');
+    });
 </script>
 </body>
 </html>
-
